@@ -90,7 +90,7 @@ def upload_predict():
             image_file.save(image_location)
             # generate the prediction
             pred = predict(image_location, MODEL)[0]
-            return render_template("index.html", prediction=pred, image_loc=image_location)        
+            return render_template("index.html", prediction=pred, image_loc=image_file.filename)        
     return render_template("index.html", prediction=0, image_loc=None)
 
 if __name__ == "__main__":

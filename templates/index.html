@@ -19,8 +19,10 @@
       <input type="file" id="image" name="image" class="form-control" required autofocus>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Predict</button>
       <br>
-      <img class="mb-4" src="" alt="" width="72" height="72">
-      <h3 class="h3 mb-3 font-weight-normal">Prediction: {{prediction}}</h3>
+      {% if image_loc %}
+        <img class="mb-4" src="static/{{image_loc}}" alt="" width="256" height="256">
+        <h3 class="h3 mb-3 font-weight-normal">Prediction: {{prediction}}</h3>
+      {% endif %}      
     </form>
   </body>
 </html>
