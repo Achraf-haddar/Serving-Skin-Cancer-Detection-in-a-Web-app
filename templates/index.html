@@ -1,9 +1,26 @@
-<!DOCTYPE html>
-<title>Upload new file</title>
-<h1>Upload new File</h1>
-<form method=post enctype=multipart/form-data>
-    <input type=file name=image>
-    <input type=submit value=Predict>
-    <br>
-    <h3>Prediction: {{prediction}}</h3>
-</form>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>Skin Cancer Detection</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/form_upload.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form method=post enctype=multipart/form-data class="form-upload">
+      <h1 class="h3 mb-3 font-weight-normal">Please upload image</h1>
+      <input type="file" id="image" name="image" class="form-control" required autofocus>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Predict</button>
+      <br>
+      <img class="mb-4" src="" alt="" width="72" height="72">
+      <h3 class="h3 mb-3 font-weight-normal">Prediction: {{prediction}}</h3>
+    </form>
+  </body>
+</html>

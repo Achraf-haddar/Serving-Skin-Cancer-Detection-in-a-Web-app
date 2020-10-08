@@ -16,8 +16,8 @@ from flask import request
 from flask import render_template
 from torch.nn import functional as F
 
-from wtfml.data_loaders.image import classification
-from wtfml.engine import Engine
+from dataset import ClassificationDataset
+import engine
 from wtfml.utils import EarlyStopping
  
 
@@ -40,7 +40,7 @@ class SEResNex50_32x4d(nn.Module):
         x = self.base_model.features(image)
         x = F.adaptive_avg_pool2d(x, 1)
         x = x.reshape(bs, -1)
-        out = self.l0(x)
+        out = torch.sigmoid(self.l0(x))
         return out 
 
 def predict(image_path, model):
@@ -56,8 +56,8 @@ def predict(image_path, model):
     test_targets = [0]
 
     # Test data loader
-    test_dataset = classification.ClassificationDataset(
-        image_paths=test_images,
+    test_dataset = ClassificationDataset(
+        image_path=test_images,
         targets=test_targets,
         resize=None,
         augmentations=test_aug
@@ -69,9 +69,10 @@ def predict(image_path, model):
         num_workers=0
     )
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-    eng = Engine(model=model, optimizer=optimizer, device=DEVICE)
-    predictions = eng.evaluate(
-        data_loader=test_loader
+    predictions = engine.evaluate(
+        data_loader=test_loader,
+        model=model,
+        device=DEVICE
     )
     return np.vstack((predictions)).ravel()
 
@@ -88,10 +89,9 @@ def upload_predict():
             )
             image_file.save(image_location)
             # generate the prediction
-            pred = predict(image_location, MODEL)
-            print(pred)
-            return render_template("index.html", prediction=1)        
-    return render_template("index.html", prediction=0)
+            pred = predict(image_location, MODEL)[0]
+            return render_template("index.html", prediction=pred, image_loc=image_location)        
+    return render_template("index.html", prediction=0, image_loc=None)
 
 if __name__ == "__main__":
     MODEL = SEResNex50_32x4d(pretrained="imagenet")
