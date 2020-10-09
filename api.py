@@ -18,12 +18,11 @@ from torch.nn import functional as F
 
 from dataset import ClassificationDataset
 import engine
-from wtfml.utils import EarlyStopping
  
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "/home/achraf/Desktop/workspace/Skin Cancer Detection Serving/static"
-DEVICE = "cuda"
+UPLOAD_FOLDER = "/home/achraf/app/static"
+DEVICE = "cpu"
 MODEL = None
 
 class SEResNex50_32x4d(nn.Module):
@@ -94,8 +93,8 @@ def upload_predict():
     return render_template("index.html", prediction=0, image_loc=None)
 
 if __name__ == "__main__":
-    MODEL = SEResNex50_32x4d(pretrained="imagenet")
-    MODEL.load_state_dict(torch.load("model.bin"))
+    MODEL = SEResNex50_32x4d(pretrained=None)
+    MODEL.load_state_dict(torch.load("model.bin", map_location=torch.device(DEVICE)))
     MODEL.to(DEVICE)
 
-    app.run(port=12000, debug=True)
+    app.run(host="0.0.0.0", port=12000, debug=True)

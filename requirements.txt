@@ -1,0 +1,5 @@
+opencv-contrib-python-headless
+torch==1.5.0
+flask
+pretrainedmodels
+albumentations==0.4.0
